@@ -13,92 +13,61 @@ Disclaimer: Redis is a registered trademark of Redis Labs Ltd. Any rights therei
 ## TL;DR
 
 ```console
-$ docker run --name redis -e ALLOW_EMPTY_PASSWORD=yes bitnami/redis:latest
+$ docker run --name redis -e ALLOW_EMPTY_PASSWORD=yes quay.io/drycc-addons/redis:6.2
 ```
 
 ### Docker Compose
 
 ```console
-$ curl -sSL https://raw.githubusercontent.com/bitnami/bitnami-docker-redis/master/docker-compose.yml > docker-compose.yml
+$ curl -sSL https://raw.githubusercontent.com/drycc-addons/drycc-docker-redis/main/docker-compose.yml > docker-compose.yml
 $ docker-compose up -d
 ```
 
 **Warning**: These quick setups are only intended for development environments. You are encouraged to change the insecure default credentials and check out the available configuration options in the [Configuration](#configuration) section for a more secure deployment.
 
-## Why use Bitnami Images?
-
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [minideb](https://github.com/bitnami/minideb) a minimalist Debian based container image which gives you a small base container image and the familiarity of a leading Linux distribution.
-* All Bitnami images available in Docker Hub are signed with [Docker Content Trust (DCT)](https://docs.docker.com/engine/security/trust/content_trust/). You can use `DOCKER_CONTENT_TRUST=1` to verify the integrity of the images.
-* Bitnami container images are released daily with the latest distribution packages available.
-
-> This [CVE scan report](https://quay.io/repository/bitnami/redis?tab=tags) contains a security report with all open CVEs. To get the list of actionable security issues, find the "latest" tag, click the vulnerability report link under the corresponding "Security scan" field and then select the "Only show fixable" filter on the next page.
-
-## How to deploy Redis(TM) in Kubernetes?
-
-Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami Redis(TM) Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/redis).
-
-Bitnami containers can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
-
-## Why use a non-root container?
-
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.bitnami.com/tutorials/work-with-non-root-containers/).
-
-## Supported tags and respective `Dockerfile` links
-
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers/).
-
-
-* [`6.2`, `6.2-debian-10`, `6.2.6`, `6.2.6-debian-10-r180`, `latest` (6.2/debian-10/Dockerfile)](https://github.com/bitnami/bitnami-docker-redis/blob/6.2.6-debian-10-r180/6.2/debian-10/Dockerfile)
-* [`6.0`, `6.0-debian-10`, `6.0.16`, `6.0.16-debian-10-r177` (6.0/debian-10/Dockerfile)](https://github.com/bitnami/bitnami-docker-redis/blob/6.0.16-debian-10-r177/6.0/debian-10/Dockerfile)
-
-Subscribe to project updates by watching the [bitnami/redis GitHub repo](https://github.com/bitnami/bitnami-docker-redis).
-
 ## Get this image
 
-The recommended way to get the Bitnami Redis(TM) Docker Image is to pull the prebuilt image from the [Docker Hub Registry](https://hub.docker.com/r/bitnami/redis).
+The recommended way to get the Bitnami Redis(TM) Docker Image is to pull the prebuilt image from the [Container Image Registry](https://quay.io/repository/drycc-addons/redis).
 
 ```console
-$ docker pull bitnami/redis:latest
+$ docker pull quay.io/drycc-addons/redis:6.2
 ```
 
-To use a specific version, you can pull a versioned tag. You can view the [list of available versions](https://hub.docker.com/r/bitnami/redis/tags/) in the Docker Hub Registry.
+To use a specific version, you can pull a versioned tag. You can view the [list of available versions](https://quay.io/repository/drycc-addons/redis?tab=tags) in the Container Image Registry.
 
 ```console
-$ docker pull bitnami/redis:[TAG]
+$ docker pull quay.io/drycc-addons/redis:[TAG]
 ```
 
 If you wish, you can also build the image yourself.
 
 ```console
-$ docker build -t bitnami/redis:latest 'https://github.com/bitnami/bitnami-docker-redis.git#master:6.2/debian-10'
+$ docker build -t quay.io/drycc-addons/redis:6.2 'https://github.com/drycc-addons/drycc-docker-redis.git#main:6.2/debian-10'
 ```
 
 ## Persisting your database
 
-Redis(TM) provides a different range of [persistence options](https://redis.io/topics/persistence). This contanier uses *AOF persistence by default* but it is easy to overwrite that configuration in a `docker-compose.yaml` file with this entry `command: /opt/drycc/scripts/redis/run.sh --appendonly no`. Alternatively, you may use the `REDIS_AOF_ENABLED` env variable as explained in [Disabling AOF persistence](https://github.com/bitnami/bitnami-docker-redis#disabling-aof-persistence).
+Redis(TM) provides a different range of [persistence options](https://redis.io/topics/persistence). This contanier uses *AOF persistence by default* but it is easy to overwrite that configuration in a `docker-compose.yaml` file with this entry `command: /opt/drycc/scripts/redis/run.sh --appendonly no`. Alternatively, you may use the `REDIS_AOF_ENABLED` env variable as explained in [Disabling AOF persistence](https://github.com/drycc-addons/drycc-docker-redis#disabling-aof-persistence).
 
 If you remove the container all your data will be lost, and the next time you run the image the database will be reinitialized. To avoid this loss of data, you should mount a volume that will persist even after the container is removed.
 
-For persistence you should mount a directory at the `/bitnami` path. If the mounted directory is empty, it will be initialized on the first run.
+For persistence you should mount a directory at the `/drycc` path. If the mounted directory is empty, it will be initialized on the first run.
 
 ```console
 $ docker run \
     -e ALLOW_EMPTY_PASSWORD=yes \
-    -v /path/to/redis-persistence:/bitnami/redis/data \
-    bitnami/redis:latest
+    -v /path/to/redis-persistence:/drycc/redis/data \
+    quay.io/drycc-addons/redis:6.2
 ```
 
-You can also do this by modifying the [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-redis/blob/master/docker-compose.yml) file present in this repository:
+You can also do this by modifying the [`docker-compose.yml`](https://github.com/drycc-addons/drycc-docker-redis/blob/main/docker-compose.yml) file present in this repository:
 
 ```yaml
 services:
   redis:
   ...
     volumes:
-      - /path/to/redis-persistence:/bitnami/redis/data
+      - /path/to/redis-persistence:/drycc/redis/data
   ...
 ```
 
@@ -128,7 +97,7 @@ Use the `--network app-tier` argument to the `docker run` command to attach the 
 $ docker run -d --name redis-server \
     -e ALLOW_EMPTY_PASSWORD=yes \
     --network app-tier \
-    bitnami/redis:latest
+    quay.io/drycc-addons/redis:6.2
 ```
 
 #### Step 3: Launch your Redis(TM) client instance
@@ -138,7 +107,7 @@ Finally we create a new container instance to launch the Redis(TM) client and co
 ```console
 $ docker run -it --rm \
     --network app-tier \
-    bitnami/redis:latest redis-cli -h redis-server
+    quay.io/drycc-addons/redis:6.2 redis-cli -h redis-server
 ```
 
 ### Using Docker Compose
@@ -154,7 +123,7 @@ networks:
 
 services:
   redis:
-    image: 'bitnami/redis:latest'
+    image: 'quay.io/drycc-addons/redis:6.2'
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     networks:
@@ -185,10 +154,10 @@ For security reasons, you may want to disable some commands. You can specify the
 - `REDIS_DISABLE_COMMANDS`: Comma-separated list of Redis(TM) commands to disable. Defaults to empty.
 
 ```console
-$ docker run --name redis -e REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG bitnami/redis:latest
+$ docker run --name redis -e REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG quay.io/drycc-addons/redis:6.2
 ```
 
-Alternatively, modify the [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-redis/blob/master/docker-compose.yml) file present in this repository:
+Alternatively, modify the [`docker-compose.yml`](https://github.com/drycc-addons/drycc-docker-redis/blob/main/docker-compose.yml) file present in this repository:
 
 ```yaml
 services:
@@ -216,10 +185,10 @@ services:
 Passing extra command-line flags to the redis service command is possible by adding them as arguments to *run.sh* script:
 
 ```console
-$ docker run --name redis -e ALLOW_EMPTY_PASSWORD=yes bitnami/redis:latest /opt/drycc/scripts/redis/run.sh --maxmemory 100mb
+$ docker run --name redis -e ALLOW_EMPTY_PASSWORD=yes quay.io/drycc-addons/redis:6.2 /opt/drycc/scripts/redis/run.sh --maxmemory 100mb
 ```
 
-Alternatively, modify the [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-redis/blob/master/docker-compose.yml) file present in this repository:
+Alternatively, modify the [`docker-compose.yml`](https://github.com/drycc-addons/drycc-docker-redis/blob/main/docker-compose.yml) file present in this repository:
 
 ```yaml
 services:
@@ -238,10 +207,10 @@ Refer to the [Redis(TM) documentation](https://redis.io/topics/config#passing-ar
 Passing the `REDIS_PASSWORD` environment variable when running the image for the first time will set the Redis(TM) server password to the value of `REDIS_PASSWORD` (or the content of the file specified in `REDIS_PASSWORD_FILE`).
 
 ```console
-$ docker run --name redis -e REDIS_PASSWORD=password123 bitnami/redis:latest
+$ docker run --name redis -e REDIS_PASSWORD=password123 quay.io/drycc-addons/redis:6.2
 ```
 
-Alternatively, modify the [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-redis/blob/master/docker-compose.yml) file present in this repository:
+Alternatively, modify the [`docker-compose.yml`](https://github.com/drycc-addons/drycc-docker-redis/blob/main/docker-compose.yml) file present in this repository:
 
 ```yaml
 services:
@@ -261,10 +230,10 @@ services:
 By default the Redis(TM) image expects all the available passwords to be set. In order to allow empty passwords, it is necessary to set the `ALLOW_EMPTY_PASSWORD=yes` env variable. This env variable is only recommended for testing or development purposes. We strongly recommend specifying the `REDIS_PASSWORD` for any other scenario.
 
 ```console
-$ docker run --name redis -e ALLOW_EMPTY_PASSWORD=yes bitnami/redis:latest
+$ docker run --name redis -e ALLOW_EMPTY_PASSWORD=yes quay.io/drycc-addons/redis:6.2
 ```
 
-Alternatively, modify the [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-redis/blob/master/docker-compose.yml) file present in this repository:
+Alternatively, modify the [`docker-compose.yml`](https://github.com/drycc-addons/drycc-docker-redis/blob/main/docker-compose.yml) file present in this repository:
 
 ```yaml
 services:
@@ -280,10 +249,10 @@ services:
 Redis(TM) offers different [options](https://redis.io/topics/persistence) when it comes to persistence. By default, this image is set up to use the AOF (Append Only File) approach. Should you need to change this behaviour, setting the `REDIS_AOF_ENABLED=no` env variable will disable this feature.
 
 ```console
-$ docker run --name redis -e REDIS_AOF_ENABLED=no bitnami/redis:latest
+$ docker run --name redis -e REDIS_AOF_ENABLED=no quay.io/drycc-addons/redis:6.2
 ```
 
-Alternatively, modify the [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-redis/blob/master/docker-compose.yml) file present in this repository:
+Alternatively, modify the [`docker-compose.yml`](https://github.com/drycc-addons/drycc-docker-redis/blob/main/docker-compose.yml) file present in this repository:
 
 ```yaml
 services:
@@ -299,10 +268,10 @@ services:
 Redis(TM) offers [ACL](https://redis.io/topics/acl) since 6.0 which allows certain connections to be limited in terms of the commands that can be executed and the keys that can be accessed. We strongly recommend enabling ACL in production by specifiying the `REDIS_ACLFILE`.
 
 ```console
-$ docker run -name redis -e REDIS_ACLFILE=/opt/drycc/redis/mounted-etc/users.acl -v /path/to/users.acl:/opt/drycc/redis/mounted-etc/users.acl bitnami/redis:latest
+$ docker run -name redis -e REDIS_ACLFILE=/opt/drycc/redis/mounted-etc/users.acl -v /path/to/users.acl:/opt/drycc/redis/mounted-etc/users.acl quay.io/drycc-addons/redis:6.2
 ```
 
-Alternatively, modify the [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-redis/blob/master/docker-compose.yml) file present in this repository:
+Alternatively, modify the [`docker-compose.yml`](https://github.com/drycc-addons/drycc-docker-redis/blob/main/docker-compose.yml) file present in this repository:
 
 ```yaml
 services:
@@ -320,10 +289,10 @@ services:
 By default, this image is set up to launch Redis(TM) in standalone mode on port 6379. Should you need to change this behavior, setting the `REDIS_PORT_NUMBER` environment variable will modify the port number. This is not to be confused with `REDIS_MASTER_PORT_NUMBER` or `REDIS_REPLICA_PORT` environment variables that are applicable in replication mode.
 
 ```console
-$ docker run --name redis -e REDIS_PORT_NUMBER=7000 -p 7000:7000 bitnami/redis:latest
+$ docker run --name redis -e REDIS_PORT_NUMBER=7000 -p 7000:7000 quay.io/drycc-addons/redis:6.2
 ```
 
-Alternatively, modify the [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-redis/blob/master/docker-compose.yml) file present in this repository:
+Alternatively, modify the [`docker-compose.yml`](https://github.com/drycc-addons/drycc-docker-redis/blob/main/docker-compose.yml) file present in this repository:
 
 ```yaml
 services:
@@ -358,7 +327,7 @@ The first step is to start the Redis(TM) master.
 $ docker run --name redis-master \
   -e REDIS_REPLICATION_MODE=master \
   -e REDIS_PASSWORD=masterpassword123 \
-  bitnami/redis:latest
+  quay.io/drycc-addons/redis:6.2
 ```
 
 In the above command the container is configured as the `master` using the `REDIS_REPLICATION_MODE` parameter. The `REDIS_PASSWORD` parameter enables authentication on the Redis(TM) master.
@@ -375,7 +344,7 @@ $ docker run --name redis-replica \
   -e REDIS_MASTER_PORT_NUMBER=6379 \
   -e REDIS_MASTER_PASSWORD=masterpassword123 \
   -e REDIS_PASSWORD=password123 \
-  bitnami/redis:latest
+  quay.io/drycc-addons/redis:6.2
 ```
 
 In the above command the container is configured as a `slave` using the `REDIS_REPLICATION_MODE` parameter. The `REDIS_MASTER_HOST`, `REDIS_MASTER_PORT_NUMBER` and `REDIS_MASTER_PASSWORD ` parameters are used connect and authenticate with the Redis(TM) master. The `REDIS_PASSWORD` parameter enables authentication on the Redis(TM) replica.
@@ -397,17 +366,17 @@ version: '2'
 
 services:
   redis-master:
-    image: 'bitnami/redis:latest'
+    image: 'quay.io/drycc-addons/redis:6.2'
     ports:
       - '6379'
     environment:
       - REDIS_REPLICATION_MODE=master
       - REDIS_PASSWORD=my_master_password
     volumes:
-      - '/path/to/redis-persistence:/bitnami'
+      - '/path/to/redis-persistence:/drycc'
 
   redis-replica:
-    image: 'bitnami/redis:latest'
+    image: 'quay.io/drycc-addons/redis:6.2'
     ports:
       - '6379'
     depends_on:
@@ -449,13 +418,13 @@ When enabling TLS, conventional standard traffic is disabled by default. However
     ```console
     $ docker run --name redis \
         -v /path/to/certs:/opt/drycc/redis/certs \
-        -v /path/to/redis-data-persistence:/bitnami/redis/data \
+        -v /path/to/redis-data-persistence:/drycc/redis/data \
         -e ALLOW_EMPTY_PASSWORD=yes \
         -e REDIS_TLS_ENABLED=yes \
         -e REDIS_TLS_CERT_FILE=/opt/drycc/redis/certs/redis.crt \
         -e REDIS_TLS_KEY_FILE=/opt/drycc/redis/certs/redis.key \
         -e REDIS_TLS_CA_FILE=/opt/drycc/redis/certs/redisCA.crt \
-        bitnami/redis:latest
+        quay.io/drycc-addons/redis:6.2
     ```
 
 2. Modifying the `docker-compose.yml` file present in this repository:
@@ -473,11 +442,11 @@ When enabling TLS, conventional standard traffic is disabled by default. However
         ...
         volumes:
           - /path/to/certs:/opt/drycc/redis/certs
-          - /path/to/redis-persistence:/bitnami/redis/data
+          - /path/to/redis-persistence:/drycc/redis/data
       ...
     ```
 
-Alternatively, you may also provide with this configuration in your [custom](https://github.com/bitnami/bitnami-docker-redis#configuration-file) configuration file.
+Alternatively, you may also provide with this configuration in your [custom](https://github.com/drycc-addons/drycc-docker-redis#configuration-file) configuration file.
 
 ### Configuration file
 
@@ -487,11 +456,11 @@ The image looks for configurations in `/opt/drycc/redis/mounted-etc/redis.conf`.
 $ docker run --name redis \
     -e ALLOW_EMPTY_PASSWORD=yes \
     -v /path/to/your_redis.conf:/opt/drycc/redis/mounted-etc/redis.conf \
-    -v /path/to/redis-data-persistence:/bitnami/redis/data \
-    bitnami/redis:latest
+    -v /path/to/redis-data-persistence:/drycc/redis/data \
+    quay.io/drycc-addons/redis:6.2
 ```
 
-Alternatively, modify the [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-redis/blob/master/docker-compose.yml) file present in this repository:
+Alternatively, modify the [`docker-compose.yml`](https://github.com/drycc-addons/drycc-docker-redis/blob/main/docker-compose.yml) file present in this repository:
 
 ```yaml
 services:
@@ -499,7 +468,7 @@ services:
   ...
     volumes:
       - /path/to/your_redis.conf:/opt/drycc/redis/mounted-etc/redis.conf
-      - /path/to/redis-persistence:/bitnami/redis/data
+      - /path/to/redis-persistence:/drycc/redis/data
   ...
 ```
 
@@ -513,10 +482,10 @@ Instead of providing a custom `redis.conf`, you may also choose to provide only 
 $ docker run --name redis \
     -e ALLOW_EMPTY_PASSWORD=yes \
     -v /path/to/overrides.conf:/opt/drycc/redis/mounted-etc/overrides.conf \
-    bitnami/redis:latest
+    quay.io/drycc-addons/redis:6.2
 ```
 
-Alternatively, modify the [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-redis/blob/master/docker-compose.yml) file present in this repository:
+Alternatively, modify the [`docker-compose.yml`](https://github.com/drycc-addons/drycc-docker-redis/blob/main/docker-compose.yml) file present in this repository:
 
 ```yaml
 services:
@@ -553,11 +522,11 @@ Bitnami provides up-to-date versions of Redis(TM), including security patches, s
 #### Step 1: Get the updated image
 
 ```console
-$ docker pull bitnami/redis:latest
+$ docker pull quay.io/drycc-addons/redis:6.2
 ```
 
 or if you're using Docker Compose, update the value of the image property to
-`bitnami/redis:latest`.
+`quay.io/drycc-addons/redis:6.2`.
 
 #### Step 2: Stop and backup the currently running container
 
@@ -596,7 +565,7 @@ $ docker-compose rm -v redis
 Re-create your container from the new image.
 
 ```console
-$ docker run --name redis bitnami/redis:latest
+$ docker run --name redis quay.io/drycc-addons/redis:6.2
 ```
 
 or using Docker Compose:
@@ -605,71 +574,16 @@ or using Docker Compose:
 $ docker-compose up redis
 ```
 
-## Notable Changes
-
-### 5.0.8-debian-10-r24
-
-- The recommended mount point to use a custom `redis.conf` changes from `/opt/drycc/redis/etc/ ` to `/opt/drycc/redis/mounted-etc/`.
-
-### 5.0.0-r0
-
-- Starting with Redis(TM) 5.0 the command [REPLICAOF](https://redis.io/commands/replicaof) is available in favor of `SLAVEOF`. For backward compatibility with previous versions, `slave` replication mode is still supported. We encourage the use of the `REPLICAOF` command if you are using Redis(TM) 5.0.
-
-### 4.0.1-r24
-
-- Decrease the size of the container. It is not necessary Node.js anymore. Redis(TM) configuration moved to bash scripts in the `rootfs/` folder.
-- The recommended mount point to persist data changes to `/bitnami/redis/data`.
-- The main `redis.conf` file is not persisted in a volume. The path is `/opt/drycc/redis/mounted-etc/redis.conf`.
-- Backwards compatibility is not guaranteed when data is persisted using docker-compose. You can use the workaround below to overcome it:
-
-```bash
-docker-compose down
-## Locate your volume and modify the file tree
-VOLUME=$(docker volume ls | grep "redis_data" | awk '{print $2}')
-docker run --rm -i -v=${VOLUME}:/tmp/redis busybox find /tmp/redis/data -maxdepth 1 -exec mv {} /tmp/redis \;
-docker run --rm -i -v=${VOLUME}:/tmp/redis busybox rm -rf /tmp/redis/{data,conf,.initialized}
-## Change the mount point
-sed -i -e 's#redis_data:/bitnami/redis#redis_data:/bitnami/redis/data#g' docker-compose.yml
-## Pull the latest bitnami/redis image
-docker pull bitnami/redis:latest
-docker-compose up -d
-```
-
-### 4.0.1-r1
-
-- The redis container has been migrated to a non-root container approach. Previously the container run as `root` user and the redis daemon was started as `redis` user. From now own, both the container and the redis daemon run as user `1001`.
-  As a consequence, the configuration files are writable by the user running the redis process.
-
-### 3.2.0-r0
-
-- All volumes have been merged at `/bitnami/redis`. Now you only need to mount a single volume at `/bitnami/redis` for persistence.
-- The logs are always sent to the `stdout` and are no longer collected in the volume.
-
 ## Contributing
 
-We'd love for you to contribute to this container. You can request new features by creating an [issue](https://github.com/bitnami/bitnami-docker-redis/issues), or submit a [pull request](https://github.com/bitnami/bitnami-docker-redis/pulls) with your contribution.
+We'd love for you to contribute to this container. You can request new features by creating an [issue](https://github.com/drycc/drycc-docker-redis/issues), or submit a [pull request](https://github.com/drycc/drycc-docker-redis/pulls) with your contribution.
 
 ## Issues
 
-If you encountered a problem running this container, you can file an [issue](https://github.com/bitnami/bitnami-docker-redis/issues/new). For us to provide better support, be sure to include the following information in your issue:
+If you encountered a problem running this container, you can file an [issue](https://github.com/drycc-addons/drycc-docker-redis/issues/new). For us to provide better support, be sure to include the following information in your issue:
 
 - Host OS and version
 - Docker version (`docker version`)
 - Output of `docker info`
 - Version of this container
 - The command you used to run the container, and any relevant output you saw (masking any sensitive information)
-
-## License
-Copyright &copy; 2022 Bitnami
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.

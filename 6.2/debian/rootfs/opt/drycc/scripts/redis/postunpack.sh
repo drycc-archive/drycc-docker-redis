@@ -19,8 +19,8 @@ for dir in "$REDIS_VOLUME_DIR" "$REDIS_DATA_DIR" "$REDIS_BASE_DIR" "$REDIS_CONF_
 done
 chmod -R g+rwX /drycc "$REDIS_VOLUME_DIR" "$REDIS_BASE_DIR"
 
-touch "${REDIS_BASE_DIR}/redis-default.conf"
-cp "${REDIS_BASE_DIR}/redis-default.conf" "$REDIS_CONF_FILE"
+cp "${REDIS_BASE_DIR}/etc/redis-default.conf" "$REDIS_CONF_FILE"
+
 chmod g+rw "$REDIS_CONF_FILE"
 # Default Redis config
 info "Setting Redis config file..."

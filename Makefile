@@ -1,14 +1,14 @@
 # If DRYCC_REGISTRY is not set, try to populate it from legacy DEV_REGISTRY
 DRYCC_REGISTRY ?= $(DEV_REGISTRY)
 IMAGE_PREFIX ?= drycc-addons
-COMPONENT ?= mariadb
+COMPONENT ?= redis
 SHORT_NAME ?= $(COMPONENT)
 PLATFORM ?= linux/amd64,linux/arm64
-VERSION ?= 6.2
+REDIS_VERSION ?= 6.2
 
 include versioning.mk
 
-SHELL_SCRIPTS = $(shell find ${VERSION}/debian/ -name '*.sh') $(wildcard *.sh)
+SHELL_SCRIPTS = $(shell find ${REDIS_VERSION}/debian/ -name '*.sh') $(wildcard *.sh)
 
 DEV_ENV_IMAGE := ${DRYCC_REGISTRY}/drycc/go-dev
 DEV_ENV_WORK_DIR := /opt/drycc/go/src/${REPO_PATH}
@@ -31,11 +31,11 @@ test-style:
 build: docker-build
 
 docker-build: check-docker
-	docker build ${DOCKER_BUILD_FLAGS} -t ${IMAGE} ${VERSION}/debian
+	docker build ${DOCKER_BUILD_FLAGS} -t ${IMAGE} ${REDIS_VERSION}/debian
 	docker tag ${IMAGE} ${MUTABLE_IMAGE}
 
 docker-buildx: check-docker
-	docker buildx build --platform ${PLATFORM} -t ${IMAGE} ${VERSION}/debian --push
+	docker buildx build --platform ${PLATFORM} -t ${IMAGE} ${REDIS_VERSION}/debian --push
 
 clean: check-docker
 	docker rmi $(IMAGE)

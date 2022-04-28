@@ -30,7 +30,8 @@ steps:
   - echo $CONTAINER_PASSWORD | docker login $DRYCC_REGISTRY --username $CONTAINER_USERNAME --password-stdin > /dev/null 2>&1
   - make docker-build docker-immutable-push
   environment:
-    VERSION: ${DRONE_TAG:-latest}-linux-amd64
+    REDIS_VERSION: ${DRONE_TAG:-6.2}
+    VERSION: ${DRONE_TAG:-6.2}-linux-amd64
     DEV_REGISTRY:
       from_secret: dev_registry
     DRYCC_REGISTRY:
@@ -59,7 +60,8 @@ steps:
   - echo $CONTAINER_PASSWORD | docker login $DRYCC_REGISTRY --username $CONTAINER_USERNAME --password-stdin > /dev/null 2>&1
   - make docker-build docker-immutable-push
   environment:
-    VERSION: ${DRONE_TAG:-latest}-linux-arm64
+    REDIS_VERSION: ${DRONE_TAG:-6.2}
+    VERSION: ${DRONE_TAG:-6.2}-linux-arm64
     DEV_REGISTRY:
       from_secret: dev_registry
     DRYCC_REGISTRY:
@@ -87,11 +89,13 @@ steps:
   pull: always
   commands:
   - sed -i "s/registry.drycc.cc/$${DRYCC_REGISTRY}/g" .drone/manifest.tmpl
+  - sed -i "s/canary/$${REDIS_VERSION}/g" .drone/manifest.tmpl
   environment:
     DEV_REGISTRY:
       from_secret: dev_registry
     DRYCC_REGISTRY:
       from_secret: drycc_registry
+    REDIS_VERSION: ${DRONE_TAG:-6.2}
 
 - name: publish
   image: plugins/manifest
@@ -109,6 +113,7 @@ steps:
 
 trigger:
   event:
+  - pull_request
   - push
   - tag
 

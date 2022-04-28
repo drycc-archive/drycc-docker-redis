@@ -2,7 +2,7 @@ version: '2'
 
 services:
   redis:
-    image: docker.io/drycc-addons/redis:6.2
+    image: registry.drycc.cc/drycc-addons/redis:6.2
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - DRYCC_DEBUG=true 
